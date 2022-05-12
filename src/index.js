@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 const { port } = require("./config");
 const { connection } = require("./config/db");
 
@@ -11,6 +12,9 @@ connection();
 
 const app = express();
 
+app.use(cors({
+  origin: ["http://127.0.0.1:5500"]
+}));
 // Middleware de JSON
 app.use(express.json());
 
