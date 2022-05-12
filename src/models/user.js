@@ -2,12 +2,21 @@ const { mongoose } = require("../config/db");
 const { Schema, model } = mongoose;
 
 const userSchema = new Schema({
-  name: String,
+  name: {
+    type: String,
+    required: [true, "name is required"],
+    trim: true
+  },
   email: {
     type: String,
-    unique: true
+    required: [true, "email is required"],
+    unique: true,
+    trim: true
   },
-  password: String,
+  password: {
+    type: String,
+    required: [true, "password is required"],
+  },
   role: {
     type: String,
     enum: ["applicant", "employer", "admin"],

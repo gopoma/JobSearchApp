@@ -13,6 +13,16 @@ function offers(app) {
     return res.status(200).json(offers);
   });
 
+  router.get("/categories", async (req, res) => {
+    const offers = await offerServ.listByCategorie(req.body.categorie);
+    return res.status(200).json(offers);
+  });
+
+  router.get("/countries", async (req, res) => {
+    const offers = await offerServ.listByCountry(req.body.country);
+    return res.status(200).json(offers);
+  });
+
   router.get("/:id", async (req, res) => {
     const offer = await offerServ.get(req.params.id);
     return res.status(200).json(offer);
@@ -35,7 +45,7 @@ function offers(app) {
 
   router.post("/addApplicant", async (req, res) => {
     const offer = await offerServ.addApplicant(req.body.idOffer, req.body.idApplicant);
-    return res.json(201).json(offer);
+    return res.status(201).json(offer);
   });
 }
 

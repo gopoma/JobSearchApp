@@ -30,7 +30,6 @@ class User {
 
   async create(data) {
     try {
-      console.log(data);
       if(data.password) {
         data.password = await this.#encrypt(data.password);
       }
@@ -51,6 +50,9 @@ class User {
 
   async update(id, data) {
     try {
+      if(data.password) {
+        data.password = await this.#encrypt(data.password);
+      }
       const user = await UserModel.findByIdAndUpdate(id, data, { new: true});
       return user;
     } catch(error) {

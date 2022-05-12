@@ -1,5 +1,5 @@
 const OfferModel = require("../models/offer");
-
+const UserModel = require("../models/user");
 class OfferService {
   async getAll() {
     try {
@@ -8,6 +8,16 @@ class OfferService {
     } catch(error) {
       console.log(error);
     }
+  }
+
+  async listByCategorie(categorie) {
+    const offers = await OfferModel.find({ categories: { $regex:  `.*${categorie}.*` } });
+    return offers;
+  }
+
+  async listByCountry(country) {
+    const offers = await OfferModel.find({ countries: { $regex: `.*${country}.*` } });
+    return offers;
   }
 
   async get(idOffer) {
@@ -45,6 +55,7 @@ class OfferService {
   async addApplicant(idOffer, idApplicant) {
     try {
       const result = await OfferModel.updateOne({ _id: idOffer }, { $push: { applicants: { _id: idApplicant } } });
+      await UserModel.updateOne({ _id: idApplicant }, { $push: { applications: { _id: idOffer } } });
       return result;
     } catch(error) {
       console.log(error);
