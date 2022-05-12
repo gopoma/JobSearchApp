@@ -1,7 +1,20 @@
-const { mongoose: { Schema, model } } = require("../config/db");
+const { mongoose } = require("../config/db");
+const { Schema, model } = mongoose;
 
 const offerSchema = new Schema({
-  name: String,
+  title: String,
   description: String,
-  categories: [String]
+  categories: [String],
+  applicants: [
+    {
+      _id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "users"
+      }
+    }
+  ]
 });
+
+const OfferModel = model("offers", offerSchema);
+
+module.exports = OfferModel;

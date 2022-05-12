@@ -19,6 +19,12 @@ function users(app) {
     return res.status(200).json(users);
   });
 
+  router.get("/:id", async (req, res) => {
+    const user = await userServ.get(req.params.id);
+
+    return res.status(200).json(user);
+  });
+
   router.post("/", async (req, res) => {
     const user = await userServ.create(req.body);
 

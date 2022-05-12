@@ -21,10 +21,6 @@ class Auth {
   }
 
   async signUp(data) {
-    if(data.password) {
-      data.password = await this.#encrypt(data.password);
-    }
-
     const userServ = new UserService();
     const user = await userServ.create(data);
 
@@ -56,17 +52,6 @@ class Auth {
     });
 
     return token;
-  }
-
-  async #encrypt(str) {
-    try {
-      const salt = await bcrypt.genSalt();
-      const hash = await bcrypt.hash(str, salt);
-
-      return hash;
-    } catch(error) {
-      console.log(error);
-    }
   }
 
   async #compare(str, hash) {

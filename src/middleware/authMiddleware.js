@@ -17,7 +17,7 @@ function verifyToken(req, res, next) {
     if(token) {
       try {
         const decoded = jwt.verify(token, jwtSecret);
-        console.log(decoded);
+        
         req.user = decoded;
 
         return next();

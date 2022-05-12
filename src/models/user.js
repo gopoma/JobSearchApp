@@ -1,4 +1,5 @@
-const { mongoose: { Schema, model } } = require("../config/db");
+const { mongoose } = require("../config/db");
+const { Schema, model } = mongoose;
 
 const userSchema = new Schema({
   name: String,
@@ -9,10 +10,19 @@ const userSchema = new Schema({
   password: String,
   role: {
     type: String,
-    enum: ["applicant", "employer", "admin"]
-  }
+    enum: ["applicant", "employer", "admin"],
+    default: "applicant"
+  },
+  applications: [
+    {
+      _id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "offers"
+      }
+    }
+  ]
 });
 
-const UserModel = model("User", userSchema);
+const UserModel = model("users", userSchema);
 
 module.exports = UserModel;
