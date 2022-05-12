@@ -30,6 +30,13 @@ class User {
 
   async create(data) {
     try {
+      if(!data.email.match(/^[0-9a-zA-Z]+(\.[a-zA-Z]+)*@[a-zA-Z]+(\.[a-zA-Z]+)*$/)) {
+        return {
+          error: true,
+          message: `The email ${data.email} is not valid!`
+        }
+      }
+
       if(data.password) {
         data.password = await this.#encrypt(data.password);
       }
@@ -37,13 +44,16 @@ class User {
 
       return user;
     } catch(error) {
-      if(error.code === 11000) {
-        const message = `The email ${error.keyValue.email} is already in use`;
+      let message = Object.keys(error.errors).map(key => error.errors[key].message);
 
-        return {
-          error: true,
-          message
-        }
+      switch(error.code) {
+        case 11000:
+          message = `The email ${error.keyValue.email} is already in use`;
+      }
+
+      return {
+        error: true,
+        message
       }
     }
   }

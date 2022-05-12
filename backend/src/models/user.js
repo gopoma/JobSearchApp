@@ -1,21 +1,24 @@
 const { mongoose } = require("../config/db");
 const { Schema, model } = mongoose;
+const uniqueValidator = require("mongoose-unique-validator");
 
 const userSchema = new Schema({
   name: {
     type: String,
-    required: [true, "name is required"],
+    required: [true, "Please provide name"],
     trim: true
   },
+  birthday: Date,
+  profilePic: String,
   email: {
     type: String,
-    required: [true, "email is required"],
+    required: [true, "Please provide email"],
     unique: true,
     trim: true
   },
   password: {
     type: String,
-    required: [true, "password is required"],
+    required: [true, "Please provide password"],
   },
   role: {
     type: String,
@@ -31,6 +34,7 @@ const userSchema = new Schema({
     }
   ]
 });
+userSchema.plugin(uniqueValidator);
 
 const UserModel = model("users", userSchema);
 
