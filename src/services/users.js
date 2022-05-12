@@ -4,7 +4,6 @@ class User {
   async getAll() {
     try {
       const users = await UserModel.find();
-
       return users;
     } catch(error) {
       console.log(error);
@@ -14,7 +13,6 @@ class User {
   async get(idUser) {
     try {
       const user = await UserModel.find({ _id: idUser });
-
       return user[0];
     } catch(error) {
       console.log(error);
@@ -24,7 +22,6 @@ class User {
   async getByEmail(email) {
     try {
       const user = await UserModel.findOne({ email });
-
       return user;
     } catch(error) {
       console.log(error);
@@ -37,7 +34,6 @@ class User {
       if(data.password) {
         data.password = await this.#encrypt(data.password);
       }
-
       const user = await UserModel.create(data);
 
       return user;
@@ -56,7 +52,6 @@ class User {
   async update(id, data) {
     try {
       const user = await UserModel.findByIdAndUpdate(id, data, { new: true});
-
       return user;
     } catch(error) {
       console.log(error);
@@ -66,7 +61,6 @@ class User {
   async delete(id) {
     try {
       const user = await UserModel.findByIdAndDelete(id);
-
       return user;
     } catch(error) {
       console.log(error);

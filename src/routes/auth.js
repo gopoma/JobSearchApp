@@ -9,13 +9,11 @@ function auth(app) {
 
   router.post("/login", async (req, res) => {
     const result = await authServ.logIn(req.body);
-
     return res.status(result.error ? 400 : 200).json(result);
   });
 
   router.post("/signup", normalizeRole, async (req, res) => {
     const result = await authServ.signUp(req.body);
-
     return res.status(result.error ? 400 : 200).json(result);
   });
 }
