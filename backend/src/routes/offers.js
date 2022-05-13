@@ -18,7 +18,7 @@ function offers(app) {
     return res.status(200).json(offers);
   });
 
-  router.get("/salary", async (req, res) => {
+    router.get("/salary", async (req, res) => {
     const offers = await offerServ.listBySalary(req.query.min, req.query.max);
     return res.status(200).json(offers);
   });
