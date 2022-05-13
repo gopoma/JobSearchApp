@@ -11,6 +11,18 @@ class OfferService {
     }
   }
 
+  async listBySalary(min, max) {
+    if(!min) {
+      min = Number.MIN_SAFE_INTEGER;
+    }
+    if(!max) {
+      max = Number.MAX_SAFE_INTEGER;
+    }
+
+    const offers = await OfferModel.find({ salary: { $gte: min, $lte: max } });
+    return offers;
+  }
+
   async listByCategorie(categorie) {
     const offers = await OfferModel.find({ categories: { $regex:  `.*${categorie}.*` } }).populate("comments");
     return offers;

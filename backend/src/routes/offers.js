@@ -18,13 +18,18 @@ function offers(app) {
     return res.status(200).json(offers);
   });
 
+  router.get("/salary", async (req, res) => {
+    const offers = await offerServ.listBySalary(req.query.min, req.query.max);
+    return res.status(200).json(offers);
+  });
+
   router.get("/categories", async (req, res) => {
-    const offers = await offerServ.listByCategorie(req.body.categorie);
+    const offers = await offerServ.listByCategorie(req.query.categorie);
     return res.status(200).json(offers);
   });
 
   router.get("/countries", async (req, res) => {
-    const offers = await offerServ.listByCountry(req.body.country);
+    const offers = await offerServ.listByCountry(req.query.country);
     return res.status(200).json(offers);
   });
 
