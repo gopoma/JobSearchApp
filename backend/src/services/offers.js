@@ -1,9 +1,10 @@
 const OfferModel = require("../models/offer");
 const UserModel = require("../models/user");
+const CommentService = require("../services/comments");
 class OfferService {
   async getAll() {
     try {
-      const offers = OfferModel.find().populate("applicants", "name email role");
+      const offers = OfferModel.find().populate("applicants", "name email role").populate("comments");
       return offers;
     } catch(error) {
       console.log(error);
@@ -11,17 +12,17 @@ class OfferService {
   }
 
   async listByCategorie(categorie) {
-    const offers = await OfferModel.find({ categories: { $regex:  `.*${categorie}.*` } });
+    const offers = await OfferModel.find({ categories: { $regex:  `.*${categorie}.*` } }).populate("comments");
     return offers;
   }
 
   async listByCountry(country) {
-    const offers = await OfferModel.find({ countries: { $regex: `.*${country}.*` } });
+    const offers = await OfferModel.find({ countries: { $regex: `.*${country}.*` } }).populate("comments");
     return offers;
   }
 
   async get(idOffer) {
-    const offer = await OfferModel.find({ _id: idOffer });
+    const offer = await OfferModel.find({ _id: idOffer }).populate("comments");
     return offer[0];
   }
 
@@ -37,6 +38,13 @@ class OfferService {
         messages
       };
     }
+  }
+
+  async addComment(idOffer, idUser, content) {
+    const commentServ = new CommentService();
+    const comment = await commentServ.create(idOffer, idUser, content);
+    const result = await OfferModel.updateOne({_id: idOffer}, {$push:{comments:{_id:comment.id}}});
+    return result;
   }
 
   async update(user, idOffer, data) {

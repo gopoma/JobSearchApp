@@ -38,6 +38,16 @@ function offers(app) {
     return res.status(offer.error ? 400 : 201).json(offer);
   });
 
+  router.post("/addApplicant", async (req, res) => {
+    const offer = await offerServ.addApplicant(req.body.idOffer, req.body.idApplicant);
+    return res.status(201).json(offer);
+  });
+
+  router.post("/:idOffer/addComment", async (req, res) => {
+    const result = await offerServ.addComment(req.params.idOffer, req.user.id, req.body.content);
+    return res.status(201).json(result);
+  });
+
   router.put("/:id", employerAdminValidation, async (req, res) => {
     const offer = await offerServ.update(req.user, req.params.id, req.body);
     return res.status(offer.error ? 403 : 201).json(offer);
@@ -46,11 +56,6 @@ function offers(app) {
   router.delete("/:id", employerAdminValidation, async (req, res) => {
     const offer = await offerServ.delete(req.user, req.params.id);
     return res.status(offer.error ? 403 : 201).json(offer);
-  });
-
-  router.post("/addApplicant", async (req, res) => {
-    const offer = await offerServ.addApplicant(req.body.idOffer, req.body.idApplicant);
-    return res.status(201).json(offer);
   });
 }
 
