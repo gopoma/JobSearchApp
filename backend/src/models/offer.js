@@ -19,15 +19,15 @@ const offerSchema = new Schema({
   },
   categories: [String],
   countries: [String],
-  salary: Number,
-  applicants: [
-    {
-      _id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "users"
-      }
-    }
-  ]
+  deadline: Date,
+  salary: {
+    type: Number,
+    required: [true, "Please provide salary"]
+  },
+  applicants: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "users"
+  }]
 }, { timestamps: true });
 
 const OfferModel = model("offers", offerSchema);

@@ -10,30 +10,29 @@ function users(app) {
   const userServ = new UserService();
 
   app.use("/api/users", verifyToken);
-  app.use("/api/users", adminValidation);
   app.use("/api/users", router);
 
-  router.get("/", async (req, res) => {
+  router.get("/", adminValidation, async (req, res) => {
     const users = await userServ.getAll();
     return res.status(200).json(users);
   });
 
   router.get("/:id", async (req, res) => {
-    const user = await userServ.get(req.params.id);
+    const user = await userServ.get(req.params.id, req.user.role);
     return res.status(200).json(user);
   });
 
-  router.post("/", async (req, res) => {
+  router.post("/", adminValidation, async (req, res) => {
     const user = await userServ.create(req.body);
     return res.status(user.error ? 400 : 201).json(user);
   });
 
-  router.put("/:id", async (req, res) => {
+  router.put("/:id", adminValidation, async (req, res) => {
     const user = await userServ.update(req.params.id, req.body);
     return res.status(201).json(user);
   });
 
-  router.delete("/:id", async (req, res) => {
+  router.delete("/:id", adminValidation, async (req, res) => {
     const user = await userServ.delete(req.params.id);
     return res.status(202).json(user);
   });

@@ -10,10 +10,23 @@ class User {
     }
   }
 
-  async get(idUser) {
+  async get(idUser, role) {
     try {
-      const user = await UserModel.find({ _id: idUser });
-      return user[0];
+      const userData = await UserModel.find({ _id: idUser });
+
+      if(role === "admin") {
+        return userData[0];
+      }
+
+      const user = userData[0];
+      return {
+        _id: user._id,
+        name: user.name,
+        birthday: user.birthday,
+        profilePic: user.profilePic,
+        email: user.email,
+        role: user.role
+      };
     } catch(error) {
       console.log(error);
     }
@@ -30,10 +43,10 @@ class User {
 
   async create(data) {
     try {
-      if(!data.email.match(/^[0-9a-zA-Z]+(\.[a-zA-Z]+)*@[a-zA-Z]+(\.[a-zA-Z]+)*$/)) {
+      if(data.email && !data.email.match(/^[0-9a-zA-Z]+(\.[a-zA-Z]+)*@[a-zA-Z]+(\.[a-zA-Z]+)*$/)) {
         return {
           error: true,
-          message: `The email ${data.email} is not valid!`
+          messages: [`The email ${data.email} is not valid!`]
         }
       }
 
@@ -44,16 +57,11 @@ class User {
 
       return user;
     } catch(error) {
-      let message = Object.keys(error.errors).map(key => error.errors[key].message);
-
-      switch(error.code) {
-        case 11000:
-          message = `The email ${error.keyValue.email} is already in use`;
-      }
+      const messages = Object.keys(error.errors).map(key => error.errors[key].message);
 
       return {
         error: true,
-        message
+        messages
       }
     }
   }
