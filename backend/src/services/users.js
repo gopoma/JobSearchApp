@@ -3,7 +3,7 @@ const UserModel = require("../models/user");
 class User {
   async getAll() {
     try {
-      const users = await UserModel.find();
+      const users = await UserModel.find().populate("applications._id");
       return users;
     } catch(error) {
       console.log(error);
